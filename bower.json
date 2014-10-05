@@ -1,0 +1,16 @@
+{
+  "name": "gulp-testkit",
+  "version": "0.0.0",
+  "homepage": "https://github.com/fainder/gulp-testkit",
+  "authors": [
+    "fainder <chee@fainder.info>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
