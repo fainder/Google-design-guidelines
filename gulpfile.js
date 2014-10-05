@@ -47,7 +47,7 @@ gulp.task('sass', function() {
 
 gulp.task('css', function () {
   return gulp.src([
-    './css/**/*.css'
+    'css/**/*.css'
   ])
   .pipe($.changed('./' + process.env.CSS_DIR, {extension: '.css'}))
   .pipe($.autoprefixer(AUTOPREFIXER_BROWSERS))
