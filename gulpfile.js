@@ -5,6 +5,8 @@ var del            = require('del');
 var browserSync    = require('browser-sync');
 var reload         = browserSync.reload;
 
+module.exports = gulp;
+
 var AUTOPREFIXER_BROWSERS = [
 'ie >= 10',
 'ie_mob >= 10',
@@ -41,31 +43,38 @@ gulp.task('sass', function() {
   )
   .pipe($.autoprefixer(AUTOPREFIXER_BROWSERS))
   .pipe(gulp.dest('css/'))
-  .pipe(reload({stream:true}))
+  .pipe(browserSync.reload({stream:true}))
   .pipe($.size({title: 'sass'}));
 });
 
-gulp.task('css', function () {
+gulp.task('css', function() {
   return gulp.src([
-    'css/**/*.css'
+    'css/*.css'
   ])
-  .pipe($.changed('./' + process.env.CSS_DIR, {extension: '.css'}))
   .pipe($.autoprefixer(AUTOPREFIXER_BROWSERS))
   .pipe(gulp.dest('css/'))
-  .pipe(reload({stream:true}))
+  .pipe(browserSync.reload({stream:true}))
   .pipe($.size({title: 'css'}));
+});
+
+gulp.task('css:uncss', function() {
+  return gulp.src('css/style.css')
+  .pipe($.uncss({
+    html: ['introduction.html']
+  }))
+  .pipe(gulp.dest('./dist'));
 });
 
 // Concatenate And Minify ------------------------
 gulp.task('js', function() {
-  return gulp.src('js/**/.js')
+  return gulp.src('js/*.js')
   .pipe(gulp.dest('dist/'))
   .pipe($.size({title: 'js'}));
 });
 
 // Edited php file after reload browsers
 gulp.task('html', function() {
-  return gulp.src('./**/*.html');
+  return gulp.src('./*.html');
 });
 
 // serve -----------------------------------------
@@ -75,7 +84,8 @@ gulp.task('html', function() {
 gulp.task('browser-sync', function() {
   browserSync({
     server: {
-      baseDir: "./"
+      baseDir: "./",
+      index: "introduction.html"
     },
     open: false,
     notify: false,
@@ -84,7 +94,7 @@ gulp.task('browser-sync', function() {
 
 gulp.task('default', ['browser-sync'], function() {
   gulp.watch(['sass/**/*.scss'], ['sass']);
-  gulp.watch(['css/**/*.css'], ['css']);
+  gulp.watch(['css/*.css'], ['css']);
   gulp.watch(['js/**/*.js'], ['js', reload]);
-  gulp.watch(['./**/*.html'], ['html', reload]);
+  gulp.watch(['./*.html'], ['html', reload]);
 });
