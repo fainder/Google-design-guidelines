@@ -122,6 +122,7 @@
     }
 
     function t(a, b, c) {
+        // tはFunctionプロトタイプを返しつつ、
         t = Function.prototype.bind && -1 != Function.prototype.bind.toString().indexOf("native code") ? ga : ha;
         return t.apply(null, arguments)
     }
