@@ -122,54 +122,78 @@
     }
 
     function t(a, b, c) {
-        // tはFunctionプロトタイプを返しつつ、
+        // tはFunction.prototypeをbindでき、かつ"native code"が存在するならばga関数、しなければha関数の結果が正の値
         t = Function.prototype.bind && -1 != Function.prototype.bind.toString().indexOf("native code") ? ga : ha;
+        // thisにnullを呼び出し、引数にargumentsを参照し実行する
         return t.apply(null, arguments)
     }
 
     function ia(a, b) {
+        // cはArrayオブジェクトをプロトタイプし、第二引数からを返す
         var c = Array.prototype.slice.call(arguments, 1);
         return function() {
+            // 配列コピー
             var b = c.slice();
+            // bをArrayライクなオブジェクトに変換
+            // bはオブジェクトなのでArrayのメソッドであるapplyを実行するとエラーになる
             b.push.apply(b, arguments);
+            // bを引数としてaのthisにiaのthisを呼び出し実行
             return a.apply(this, b)
         }
     }
     var ja = Date.now || function() {
+        // 時刻をNumberオブジェクトとしてreturn
         return +new Date
     };
 
     function u(a, b) {
         var c = a.split("."),
             d = h;
+        // c[0]がdオブジェクトにあるか、dはexecScriptではないか、VBScriptで'var " + c[0]'がtrueならばuはtrue
         c[0] in d || !d.execScript || d.execScript("var " + c[0]);
+
+        // var eで、cのlengthがtrueになり、かつeの配列の最初の要素を取り除けるまでループ
         for (var e; c.length && (e = c.shift());)
+            //
             c.length || void 0 === b ? d = d[e] ? d[e] : d[e] = {} : d[e] = b
     }
 
     function v(a, b) {
 
         function c() {}
+        // bのprototypeをcにprototype
         c.prototype = b.prototype;
+        // a.gメソッドはb.prototype
         a.g = b.prototype;
+        // a.prototypeはcオブジェクト
         a.prototype = new c;
+        // a.prototypeの生成元はa
         a.prototype.constructor = a;
         a.Ec = function(a, c, f) {
+            // bのprototypeのcメソッドを、thisにaを呼び出し、引数にArrayの2番目からを使い実行
             return b.prototype[c].apply(a, Array.prototype.slice.call(arguments, 2))
         }
     }
 
+    // function.prototypeのbindメソッドは、Function.prototype.bindでtrue、
     function.prototype.bind = Function.prototype.bind || function(a, b) {
+        // かつargumentsのlengthが1以上なら
         if (1 < arguments.length) {
+            // cはArrayのprototypeの配列の1番目からの配列
             var c = Array.prototype.slice.call(arguments, 1);
+            // cの配列の最初にthisとaを順番に追加
             c.unshift(this, a);
+            // オブジェクトtを、thisをnullで呼び出し、cを引数として実行
             return t.apply(null, c)
         }
+        // tのthisにvのthisを呼び出し、引数にaを参照し実行する
         return t(this, a)
     };
 
     function ka(a) {
+        // Error.captureStackTraceが有効であれば、
         if (Error.captureStackTrace)
+            // kaの関数情報を除外しError出力
             Error.captureStackTrace(this, ka);
         else {
             var b = Error().stack;
