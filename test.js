@@ -3,3 +3,7 @@ var getArg = function() {
     return arg;
 };
 getArg(1, 2, 3)
+
+a = this.Q, M.O(this.v), this.v.stop(!1)
+
+console.log(a)
